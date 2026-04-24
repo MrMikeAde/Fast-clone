@@ -9,7 +9,6 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: 'Speed Test',
   description: 'Test your internet speed with download, upload, and latency measurements',
-  generator: 'v0.app',
   icons: {
     icon: [
       {
