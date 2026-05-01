@@ -73,59 +73,35 @@ export default function Home() {
             </button>
 
             {showMore && (
-              <div className="w-full flex flex-col items-center gap-12 py-10 border-t border-border mt-4">
-                <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Latency</span>
-                    <div className="flex gap-12">
-                      <div className="text-center">
-                        <div className="text-3xl font-bold">{Math.round(lastResult.unloadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Unloaded</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl font-bold">{Math.round(lastResult.loadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Loaded</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Upload</span>
+              <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 py-10 border-t border-border mt-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Latency</span>
+                  <div className="flex gap-12">
                     <div className="text-center">
-                      <div className="text-3xl font-bold">{Math.round(lastResult.uploadSpeed)} <span className="text-sm font-normal text-muted-foreground">Mbps</span></div>
-                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Speed</div>
+                      <div className="text-3xl font-bold">{Math.round(lastResult.unloadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
+                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Unloaded</div>
                     </div>
-                  </div>
-
-                  <div className="flex flex-col items-center">
-                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Details</span>
                     <div className="text-center">
-                      <div className="text-base font-bold uppercase tracking-widest">{settings.serverRegion}</div>
-                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Server</div>
+                      <div className="text-3xl font-bold">{Math.round(lastResult.loadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
+                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Loaded</div>
                     </div>
                   </div>
                 </div>
 
-                {/* Social Links under more info */}
-                <div className="flex gap-6 mt-4">
-                  <a
-                    href="https://github.com/MrMikeAde"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-all hover:scale-110"
-                    title="GitHub Profile"
-                  >
-                    <Github size={24} />
-                  </a>
-                  <a
-                    href="https://meetmike.netlify.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground transition-all hover:scale-110"
-                    title="Portfolio Website"
-                  >
-                    <Globe size={24} />
-                  </a>
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Upload</span>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold">{Math.round(lastResult.uploadSpeed)} <span className="text-sm font-normal text-muted-foreground">Mbps</span></div>
+                    <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Speed</div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Details</span>
+                  <div className="text-center">
+                    <div className="text-base font-bold uppercase tracking-widest">{settings.serverRegion}</div>
+                    <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Server</div>
+                  </div>
                 </div>
               </div>
             )}
@@ -171,9 +147,30 @@ export default function Home() {
       )}
 
       <footer className="w-full max-w-5xl py-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] mt-auto">
-        <div className="flex gap-8">
+        <div className="flex items-center gap-8">
           <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
           <a href="https://github.com/MrMikeAde/Fast-clone" target="_blank" rel="noopener noreferrer" className="hover:text-foreground">Source code</a>
+
+          <div className="flex gap-4 ml-4 border-l border-border pl-8">
+            <a
+              href="https://github.com/MrMikeAde"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-all hover:scale-110"
+              aria-label="GitHub Profile"
+            >
+              <Github size={18} />
+            </a>
+            <a
+              href="https://meetmike.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-foreground transition-all hover:scale-110"
+              aria-label="Portfolio Website"
+            >
+              <Globe size={18} />
+            </a>
+          </div>
         </div>
         <div className="flex items-center gap-2 select-none">
           Powered by <Github size={12} className="inline-block" /> /Mrmikeade

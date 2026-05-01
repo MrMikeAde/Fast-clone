@@ -2,7 +2,14 @@
 > my-project@0.1.0 start /app
 > next start --port 3003
 
-▲ Next.js 16.2.0
-- Local:         http://localhost:3003
-- Network:       http://192.168.0.2:3003
-✓ Ready in 208ms
+⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use :::3003
+    at <unknown> (Error: listen EADDRINUSE: address already in use :::3003)
+    at new Promise (<anonymous>) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '::',
+  port: 3003
+}
+ ELIFECYCLE  Command failed with exit code 1.
