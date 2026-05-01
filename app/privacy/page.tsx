@@ -1,13 +1,16 @@
-import { Github, Globe, Heart, Rocket, Mail } from 'lucide-react'
+import { Github, Globe, Heart, Rocket, Mail, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
 export default function PrivacyPage() {
   return (
     <main className="min-h-screen flex flex-col items-center px-4 sm:px-6">
-      <div className="w-full max-w-5xl pt-8 pb-12 flex justify-start items-center">
+      <div className="w-full max-w-5xl pt-8 pb-12 flex justify-between items-center">
         <Link href="/" className="text-3xl font-black tracking-tighter flex items-center gap-1 select-none hover:opacity-80 transition-opacity">
           <span className="text-accent">FAST</span>
           <span className="text-foreground">.COM</span>
+        </Link>
+        <Link href="/" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest hover:text-accent transition-colors">
+          <ArrowLeft size={16} /> Back to test
         </Link>
       </div>
 
@@ -68,7 +71,7 @@ export default function PrivacyPage() {
               <Globe size={16} /> Visit Portfolio
             </a>
             <a
-              href="mailto:adebayomike9@gmail.com"
+              href="mailto:michaeladedapo01@gmail.com"
               className="inline-flex items-center gap-2 px-8 py-4 border-2 border-foreground font-black uppercase tracking-widest text-xs hover:bg-foreground hover:text-background transition-colors"
             >
               <Mail size={16} /> Get in touch
@@ -77,8 +80,7 @@ export default function PrivacyPage() {
         </section>
       </div>
 
-      <footer className="w-full max-w-5xl py-8 border-t border-border flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] mt-auto">
-        <Link href="/" className="hover:text-foreground">Back to test</Link>
+      <footer className="w-full max-w-5xl py-8 border-t border-border flex justify-end items-center text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] mt-auto">
         <div className="flex items-center gap-2 select-none">
           Powered by <Github size={12} className="inline-block" /> /Mrmikeade
         </div>
