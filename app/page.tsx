@@ -2,15 +2,14 @@
 
 import { useState } from 'react'
 import { useSpeedTest } from '@/hooks/use-speed-test'
-import { Header } from '@/components/header'
-import { SpeedGauge } from '@/components/speed-gauge'
-import { ResultsCard } from '@/components/results-card'
+import { FastSpeedDisplay } from '@/components/fast-speed-display'
+import { Button } from '@/components/ui/button'
+import { ChevronDown, ChevronUp, Settings, History as HistoryIcon } from 'lucide-react'
 import { SettingsPanel } from '@/components/settings-panel'
 import { HistoryList } from '@/components/history-list'
-import { Button } from '@/components/ui/button'
-import { ChevronDown } from 'lucide-react'
 
 export default function Home() {
+  const [showMore, setShowMore] = useState(false)
   const [showSettings, setShowSettings] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   
@@ -31,102 +30,130 @@ export default function Home() {
     await runTest()
   }
 
-  const getQuality = (speed: number): 'excellent' | 'good' | 'fair' | 'poor' => {
-    if (speed >= 100) return 'excellent'
-    if (speed >= 50) return 'good'
-    if (speed >= 10) return 'fair'
-    return 'poor'
-  }
-
   return (
-    <>
-      <Header 
-        onSettingsClick={() => setShowSettings(!showSettings)}
-        onHistoryClick={() => setShowHistory(!showHistory)}
-        isTesting={isRunning}
-      />
-      
-      <main className="min-h-screen pt-20 pb-8 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-2xl">
-          {/* Main Speed Gauge */}
-          <div className="glass-effect rounded-2xl p-8 mb-8 slide-up">
-            <SpeedGauge
-              value={currentSpeed}
-              maxValue={500}
-              unit="Mbps"
-              label={isRunning ? 'Testing...' : 'Download Speed'}
-              quality={getQuality(currentSpeed)}
-              isAnimating={isRunning}
-            />
-          </div>
+    <main className="min-h-screen flex flex-col items-center px-4 sm:px-6">
+      <div className="w-full max-w-5xl pt-8 pb-4 flex justify-between items-center">
+        <div className="text-3xl font-black tracking-tighter flex items-center gap-1 select-none">
+          <span className="text-accent">FAST</span>
+          <span className="text-foreground">.COM</span>
+        </div>
 
-          {/* Start Button */}
-          <div className="flex justify-center mb-8">
+        <div className="flex gap-4">
+           <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="text-muted-foreground hover:text-foreground transition-colors p-2"
+          >
+            <HistoryIcon size={20} />
+          </button>
+          <button
+            onClick={() => setShowSettings(!showSettings)}
+            className="text-muted-foreground hover:text-foreground transition-colors p-2"
+          >
+            <Settings size={20} />
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 w-full max-w-4xl flex flex-col items-center justify-center">
+        <FastSpeedDisplay
+          value={currentSpeed}
+          isTesting={isRunning}
+          onRestart={handleStartTest}
+        />
+
+        {!isRunning && lastResult && (
+          <div className="w-full flex flex-col items-center gap-8 fade-in pb-12">
             <button
-              onClick={handleStartTest}
-              disabled={isRunning}
-              className={`relative px-16 py-4 rounded-full font-semibold text-lg transition-all duration-300 ${
-                isRunning
-                  ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                  : 'bg-primary hover:bg-blue-600 text-primary-foreground hover:shadow-glow active:scale-95'
-              }`}
+              onClick={() => setShowMore(!showMore)}
+              className="flex items-center gap-2 px-6 py-3 border border-border hover:border-foreground transition-colors text-xs font-bold uppercase tracking-[0.2em]"
             >
-              {isRunning ? (
-                <span className="flex items-center gap-2">
-                  <span className="animate-spin-slow">⚡</span>
-                  Testing...
-                </span>
-              ) : (
-                'START TEST'
-              )}
+              {showMore ? 'Show less info' : 'Show more info'}
+              {showMore ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </button>
-          </div>
 
-          {/* Results Card */}
-          {lastResult && (
-            <div className="glass-effect rounded-2xl p-6 mb-8 slide-up">
-              <ResultsCard result={lastResult} />
-            </div>
-          )}
+            {showMore && (
+              <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 py-10 border-t border-border mt-4">
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Latency</span>
+                  <div className="flex gap-12">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold">{Math.round(lastResult.unloadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
+                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Unloaded</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold">{Math.round(lastResult.loadedLatency)} <span className="text-sm font-normal text-muted-foreground">ms</span></div>
+                      <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Loaded</div>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Settings Panel */}
-          {showSettings && (
-            <div className="glass-effect rounded-2xl p-6 mb-8 slide-up">
-              <h3 className="text-lg font-bold mb-4 text-foreground">Test Settings</h3>
-              <SettingsPanel
-                settings={settings}
-                onSettingsChange={updateSettings}
-                isRunning={isRunning}
-              />
-            </div>
-          )}
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Upload</span>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold">{Math.round(lastResult.uploadSpeed)} <span className="text-sm font-normal text-muted-foreground">Mbps</span></div>
+                    <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Speed</div>
+                  </div>
+                </div>
 
-          {/* History Panel */}
-          {showHistory && (
-            <div className="glass-effect rounded-2xl p-6 mb-8 slide-up">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-foreground">Test History</h3>
-                {history.length > 0 && (
-                  <button
-                    onClick={clearHistory}
-                    className="text-sm text-muted-foreground hover:text-destructive transition-colors"
-                  >
-                    Clear
-                  </button>
-                )}
+                <div className="flex flex-col items-center">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Details</span>
+                  <div className="text-center">
+                    <div className="text-base font-bold uppercase tracking-widest">{settings.serverRegion}</div>
+                    <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-1">Server</div>
+                  </div>
+                </div>
               </div>
-              <HistoryList history={history} onClearHistory={clearHistory} />
-            </div>
-          )}
+            )}
+          </div>
+        )}
+      </div>
 
-          {/* Tips Section */}
-          <div className="glass-effect rounded-2xl p-6 text-center">
-            <p className="text-sm text-muted-foreground">
-              {isRunning ? '⏳ Testing in progress...' : '💡 Close other apps and tabs for accurate results'}
-            </p>
+      {showSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm p-4">
+          <div className="bg-background border-2 border-foreground p-8 max-w-md w-full">
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-xl font-black uppercase tracking-[0.2em]">Settings</h3>
+              <button onClick={() => setShowSettings(false)} className="p-2">✕</button>
+            </div>
+            <SettingsPanel settings={settings} onSettingsChange={updateSettings} isRunning={isRunning} />
+            <div className="mt-10">
+              <button
+                className="w-full py-4 bg-foreground text-background font-black uppercase tracking-[0.2em]"
+                onClick={() => setShowSettings(false)}
+              >
+                Save & Close
+              </button>
+            </div>
           </div>
         </div>
-      </main>
-    </>
+      )}
+
+      {showHistory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm p-4">
+          <div className="bg-background border-2 border-foreground p-8 max-w-2xl w-full max-h-[85vh] flex flex-col">
+            <div className="flex justify-between items-center mb-8">
+              <h3 className="text-xl font-black uppercase tracking-[0.2em]">History</h3>
+              <div className="flex gap-4 items-center">
+                <button onClick={clearHistory} className="text-[10px] font-black text-muted-foreground uppercase tracking-widest px-2">Clear All</button>
+                <button onClick={() => setShowHistory(false)} className="p-2">✕</button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <HistoryList history={history} onClearHistory={clearHistory} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      <footer className="w-full max-w-5xl py-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.3em] mt-auto">
+        <div className="flex gap-8">
+          <a href="#" className="hover:text-foreground">Privacy</a>
+          <a href="#" className="hover:text-foreground">Help</a>
+        </div>
+        <div className="flex items-center gap-2 select-none">
+          Powered by Netflix
+        </div>
+      </footer>
+    </main>
   )
 }
